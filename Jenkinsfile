@@ -39,7 +39,7 @@ pipeline {
         stage('Git Checkout') {
             agent{ label 'slave'}
             steps {
-                sh "if [ ! -d '/home/jenkins/jenkins_slave/workspace/apple-proj1' ]; then git clone https://github.com/Bhargava-16/apple-proj1.githtt /home/jenkins/jenkins_slave/workspace/apple-proj1 ; fi"
+                sh "if [ ! -d '/home/jenkins/jenkins_slave/workspace/apple-proj1' ]; then git clone https://github.com/Bhargava-16/apple-proj1.git /home/jenkins/jenkins_slave/workspace/apple-proj1 ; fi"
                 sh "cd /home/jenkins/jenkins_slave/workspace/apple-proj1 && sudo git checkout master"
             }
         }

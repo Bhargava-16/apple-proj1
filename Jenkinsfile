@@ -32,15 +32,15 @@ pipeline {
             agent{ label 'slave'}
             steps {
                 sh "sudo /opt/puppetlabs/bin/puppet module install garethr-docker"
-                sh "sudo /opt/puppetlabs/bin/puppet apply /home/jenkins/jenkins_slave/workspace/Certification/dockerce.pp"
+                sh "sudo /opt/puppetlabs/bin/puppet apply /home/jenkins/jenkins_slave/workspace/apple-proj1/dockerce.pp"
             }
         }
 
         stage('Git Checkout') {
             agent{ label 'slave'}
             steps {
-                sh "if [ ! -d '/home/jenkins/jenkins_slave/workspace/Certification' ]; then git clone https://github.com/Akash26-hub/DevOps-certification.git /home/jenkins/jenkins_slave/workspace/Certification ; fi"
-                sh "cd /home/jenkins/jenkins_slave/workspace/Certification && sudo git checkout master"
+                sh "if [ ! -d '/home/jenkins/jenkins_slave/workspace/apple-proj1' ]; then git clone https://github.com/Bhargava-16/apple-proj1.githtt /home/jenkins/jenkins_slave/workspace/apple-proj1 ; fi"
+                sh "cd /home/jenkins/jenkins_slave/workspace/apple-proj1 && sudo git checkout master"
             }
         }
         
@@ -48,7 +48,7 @@ pipeline {
             agent{ label 'slave'}
             steps {
                 sh "sudo docker rm -f webapp || true"
-                sh "cd /home/jenkins/jenkins_slave/workspace/Certification && sudo docker build -t test ."
+                sh "cd /home/jenkins/jenkins_slave/workspace/apple-proj1 && sudo docker build -t test ."
                 sh "sudo docker run -it -d --name webapp -p 1998:80 test"
             }
         }
@@ -68,8 +68,8 @@ pipeline {
         stage('Check if selenium test run') {
             agent{ label 'slave'}
             steps {
-		sh "cd /home/jenkins/jenkins_slave/workspace/Certification/"
-		sh "java -jar certification-project-1.0-SNAPSHOT-jar-with-dependencies.jar --headless"
+		sh "cd /home/jenkins/jenkins_slave/workspace/apple-proj1/"
+		sh "java -jar apple-proj1-1.0-SNAPSHOT-jar-with-dependencies.jar --headless"
             	}
             post {
                 failure {

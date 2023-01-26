@@ -8,9 +8,9 @@ pipeline {
                 echo 'Install Puppet'
                 sh "wget -N -O 'puppet.deb' https://apt.puppetlabs.com/puppet6-release-bionic.deb"
                 sh "chmod 755 puppet.deb"
-                sh "dpkg -i puppet.deb"
-                sh "apt update"
-                sh "apt install -y puppet-agent"
+                sh "echo '123456' | sudo -S dpkg -i puppet.deb"
+                sh "echo '123456' | sudo -S apt update"
+                sh "echo '123456' | sudo -S apt install -y puppet-agent"
             }
         }
 
@@ -19,20 +19,20 @@ pipeline {
             steps {
                 echo 'configure puppet'
                 sh "mkdir -p /etc/puppetlabs/puppet"
-                sh "if [ -f /etc/puppetlabs/puppet/puppet.conf ]; then sudo rm -f /etc/puppetlabs/puppet.conf; fi"
+                sh "if [ -f /etc/puppetlabs/puppet/puppet.conf ]; then echo '123456' | sudo -S rm -f /etc/puppetlabs/puppet.conf; fi"
                 sh "echo '[main]\ncertname = node1.local\nserver = puppet' >> ~/puppet.conf"
-                sh "sudo mv ~/puppet.conf /etc/puppetlabs/puppet/puppet.conf"
+                sh "echo '123456' | sudo -S mv ~/puppet.conf /etc/puppetlabs/puppet/puppet.conf"
                 echo 'start puppet'
-                sh "sudo systemctl start puppet"
-                sh "sudo systemctl enable puppet"
+                sh "echo '123456' | sudo -S systemctl start puppet"
+                sh "echo '123456' | sudo -S systemctl enable puppet"
             }
         }
 
         stage('Install Docker on slave through puppet') {
             agent{ label 'slave'}
             steps {
-                sh "sudo /opt/puppetlabs/bin/puppet module install garethr-docker"
-                sh "sudo /opt/puppetlabs/bin/puppet apply /home/jenkins/jenkins_slave/workspace/apple-proj1/dockerce.pp"
+                sh "echo '123456' | sudo -S /opt/puppetlabs/bin/puppet module install garethr-docker"
+                sh "echo '123456' | sudo -S /opt/puppetlabs/bin/puppet apply /home/jenkins/jenkins_slave/workspace/apple-proj1/dockerce.pp"
             }
         }
 
@@ -40,16 +40,16 @@ pipeline {
             agent{ label 'slave'}
             steps {
                 sh "if [ ! -d '/home/jenkins/jenkins_slave/workspace/apple-proj1' ]; then git clone https://github.com/Bhargava-16/apple-proj1.git /home/jenkins/jenkins_slave/workspace/apple-proj1 ; fi"
-                sh "cd /home/jenkins/jenkins_slave/workspace/apple-proj1 && sudo git checkout master"
+                sh "cd /home/jenkins/jenkins_slave/workspace/apple-proj1 && echo '123456' | sudo -S git checkout master"
             }
         }
         
         stage('Docker Build and Run') {
             agent{ label 'slave'}
             steps {
-                sh "sudo docker rm -f webapp || true"
-                sh "cd /home/jenkins/jenkins_slave/workspace/apple-proj1 && sudo docker build -t test ."
-                sh "sudo docker run -it -d --name webapp -p 1998:80 test"
+                sh "echo '123456' | sudo -S docker rm -f webapp || true"
+                sh "cd /home/jenkins/jenkins_slave/workspace/apple-proj1 && echo '123456' | sudo -S docker build -t test ."
+                sh "echo '123456' | sudo -S docker run -it -d --name webapp -p 1998:80 test"
             }
         }
 
@@ -59,9 +59,9 @@ pipeline {
                 sh "wget -N -O 'firefox-57.0.tar.bz2' http://ftp.mozilla.org/pub/firefox/releases/57.0/linux-x86_64/en-US/firefox-57.0.tar.bz2"
 				sh "tar -xjf firefox-57.0.tar.bz2"
 				sh "rm -rf /opt/firefox"
-				sh "sudo mv firefox /opt/"
-				sh "sudo mv /usr/bin/firefox /usr/bin/firefox_old"
-				sh "sudo ln -s /opt/firefox/firefox /usr/bin/firefox"
+				sh "echo '123456' | sudo -S mv firefox /opt/"
+				sh "echo '123456' | sudo -S mv /usr/bin/firefox /usr/bin/firefox_old"
+				sh "echo '123456' | sudo -S ln -s /opt/firefox/firefox /usr/bin/firefox"
             }
         }
 
@@ -74,7 +74,7 @@ pipeline {
             post {
                 failure {
                     sh "echo Failure"
-					sh "sudo docker rm -f webapp"
+					sh "echo '123456' | sudo -S docker rm -f webapp"
                 }
 			}
 		}

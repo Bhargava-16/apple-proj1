@@ -32,15 +32,15 @@ pipeline {
             agent{ label 'slave'}
             steps {
                 sh "echo '123456' | sudo -S /opt/puppetlabs/bin/puppet module install garethr-docker"
-                sh "echo '123456' | sudo -S /opt/puppetlabs/bin/puppet apply /home/jenkins/jenkins_slave/workspace/apple-proj1/dockerce.pp"
+                sh "echo '123456' | sudo -S /opt/puppetlabs/bin/puppet apply /var/lib/jenkins/workspace/test-pipeline_main/dockerce.pp"
             }
         }
 
         stage('Git Checkout') {
             agent{ label 'slave'}
             steps {
-                sh "if [ ! -d '/home/jenkins/jenkins_slave/workspace/apple-proj1' ]; then git clone https://github.com/Bhargava-16/apple-proj1.git /home/jenkins/jenkins_slave/workspace/apple-proj1 ; fi"
-                sh "cd /home/jenkins/jenkins_slave/workspace/apple-proj1 && echo '123456' | sudo -S git checkout master"
+                sh "if [ ! -d '/home/jenkins/jenkins_slave/workspace/apple-proj1' ]; then git clone https://github.com/Bhargava-16/apple-proj1.git /var/lib/jenkins/workspace/test-pipeline_main ; fi"
+                sh "cd /var/lib/jenkins/workspace/test-pipeline_main && echo '123456' | sudo -S git checkout master"
             }
         }
         
@@ -48,7 +48,7 @@ pipeline {
             agent{ label 'slave'}
             steps {
                 sh "echo '123456' | sudo -S docker rm -f webapp || true"
-                sh "cd /home/jenkins/jenkins_slave/workspace/apple-proj1 && echo '123456' | sudo -S docker build -t test ."
+                sh "cd /var/lib/jenkins/workspace/test-pipeline_main && echo '123456' | sudo -S docker build -t test ."
                 sh "echo '123456' | sudo -S docker run -it -d --name webapp -p 1998:80 test"
             }
         }
@@ -68,7 +68,7 @@ pipeline {
         stage('Check if selenium test run') {
             agent{ label 'slave'}
             steps {
-		sh "cd /home/jenkins/jenkins_slave/workspace/apple-proj1/"
+		sh "cd /var/lib/jenkins/workspace/test-pipeline_main/"
 		sh "java -jar apple-proj1-1.0-SNAPSHOT-jar-with-dependencies.jar --headless"
             	}
             post {
